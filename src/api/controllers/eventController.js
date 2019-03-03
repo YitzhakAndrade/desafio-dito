@@ -17,3 +17,15 @@ exports.create_an_event = function(req, res) {
     res.json(event);
   });
 };
+
+exports.search_event_autocomplete = function(req, res) {
+  var searchText = req.query.text;
+  if (!searchText || searchText.length < 2)
+    return res.status(400).send('Termo da busca deve ter no mínimo 2 caracteres.');
+  Event.find({ event: new RegExp('^' + searchText, 'i') })
+    .distinct('event')
+    .exec(function(err, events) {
+      if (err) res.send(err);
+      res.json(events);
+    });
+};

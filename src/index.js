@@ -29,10 +29,11 @@ app.use(bodyParser.json());
 /*
   Rotas
 */
-var purchaseRoutes = require('./api/routes/purchaseRoutes');
-var eventRoutes = require('./api/routes/eventRoutes');
-purchaseRoutes(app);
-eventRoutes(app);
+var routes = require('./api/routes');
+routes(app);
 
+/*
+  Executa a api
+*/
 app.listen(port);
 console.log('Server started on port ' + port);

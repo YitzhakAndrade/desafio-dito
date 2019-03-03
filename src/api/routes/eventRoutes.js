@@ -6,4 +6,6 @@ module.exports = function(app) {
     .route('/events')
     .get(event.list_all_events)
     .post(event.create_an_event);
+
+  app.route('/events/search').get(event.search_event_autocomplete);
 };
