@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Events Autocomplete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link id="favicon" rel="icon" type="image/x-icon" href="favicon.png">
+    <!-- https://www.cssscript.com/lightweight-flexible-pure-javascript-autocomplete-library/ -->
+    <style>
+      #autocomplete {
+        width: 300px;
+      }
+      input,
+      button,
+      .autocomplete-suggestions {
+        font-size: 18px;
+      }
+      .autocomplete-suggestions > .autocomplete-suggestion {
+        line-height: 28px;
+      }
+      .autocomplete-suggestions > .autocomplete-suggestion b {
+        font-weight: bold;
+      }
+    </style>
+    <link rel="stylesheet" href="auto-complete.css" />
+    <script src="auto-complete.min.js"></script>
+  </head>
+  <body>
+    <h1>Events Autocomplete</h1>
+    <input id="autocomplete" type="text" autocomplete="off" />
+    <button onclick="postEvent()">Add</button>
+    <button onclick="deleteAll()">Delete All</button>
+    <script>
+      // https://blog.garstasio.com/you-dont-need-jquery/ajax/
+      var xhr;
+      new autoComplete({
+        selector: 'input#autocomplete',
+        minChars: 2,
+        cache: false,
+        delay: 300,
+        source: function(term, response) {
+          try {
+            xhr.abort();
+          } catch (e) {}
+
+          xhr = new XMLHttpRequest();
+          xhr.open('GET', 'events/search?text=' + term);
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              response(JSON.parse(xhr.responseText));
+            } else {
+              alert('Request failed.  Returned status of ' + xhr.status);
+            }
+          };
+          xhr.send();
+        }
+      });
+
+      function postEvent() {
+        var autocomplete = document.getElementById('autocomplete');
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'events', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+          if (xhr.status === 200) alert('Ok!');
+          else alert('Request failed.  Returned status of ' + xhr.status);
+        };
+        xhr.send(JSON.stringify({ event: autocomplete.value }));
+      }
+
+      function deleteAll() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE', 'events/all', true);
+        xhr.onload = function() {
+          if (xhr.status === 201) alert('Ok!');
+          else if (xhr.status !== 201) alert('Request failed.  Returned status of ' + xhr.status);
+        };
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
