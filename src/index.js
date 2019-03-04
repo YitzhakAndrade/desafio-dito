@@ -3,7 +3,7 @@
 /*
   Variáveis de ambiente
 */
-var { port } = require('./config');
+var { host, port, mongoConnStr } = require('./config');
 
 /*
   Dependencias da api
@@ -17,7 +17,7 @@ var bodyParser = require('body-parser');
 */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/desafio-dito', { useNewUrlParser: true });
+mongoose.connect(mongoConnStr, { useNewUrlParser: true });
 require('./api/models');
 
 /*
@@ -36,4 +36,4 @@ routes(app);
   Executa a api
 */
 app.listen(port);
-console.log('Server started on port ' + port);
+console.log(`Server started on ${host}:${port}`);
