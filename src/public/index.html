@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Events Autocomplete</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link id="favicon" rel="icon" type="image/x-icon" href="favicon.png">
+    <link id="favicon" rel="icon" type="image/x-icon" href="favicon.png" />
     <!-- https://www.cssscript.com/lightweight-flexible-pure-javascript-autocomplete-library/ -->
     <style>
       #autocomplete {
@@ -28,9 +28,13 @@
   </head>
   <body>
     <h1>Events Autocomplete</h1>
-    <input id="autocomplete" type="text" autocomplete="off" />
-    <button onclick="postEvent()">Add</button>
-    <button onclick="deleteAll()">Delete All</button>
+    <div>
+      <input id="autocomplete" type="text" autocomplete="off" />
+      <button onclick="postEvent()">Add</button>
+      <button onclick="deleteAll()">Delete All</button>
+    </div>
+    <h1>Timeline</h1>
+    <div><pre id="timeline"></pre></div>
     <script>
       // https://blog.garstasio.com/you-dont-need-jquery/ajax/
       var xhr;
@@ -45,7 +49,7 @@
           } catch (e) {}
 
           xhr = new XMLHttpRequest();
-          xhr.open('GET', 'events/search?text=' + term);
+          xhr.open('GET', 'api/events/search?text=' + term);
           xhr.onload = function() {
             if (xhr.status === 200) {
               response(JSON.parse(xhr.responseText));
@@ -60,7 +64,7 @@
       function postEvent() {
         var autocomplete = document.getElementById('autocomplete');
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'events', true);
+        xhr.open('POST', 'api/events', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function() {
           if (xhr.status === 200) alert('Ok!');
@@ -71,13 +75,26 @@
 
       function deleteAll() {
         var xhr = new XMLHttpRequest();
-        xhr.open('DELETE', 'events/all', true);
+        xhr.open('DELETE', 'api/events/all', true);
         xhr.onload = function() {
           if (xhr.status === 201) alert('Ok!');
           else if (xhr.status !== 201) alert('Request failed.  Returned status of ' + xhr.status);
         };
         xhr.send();
       }
+
+      function loadTimeline() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'api/purchases');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var timeline = document.getElementById('timeline');
+            timeline.innerText = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
+          }
+        };
+        xhr.send();
+      }
+      loadTimeline();
     </script>
   </body>
 </html>
