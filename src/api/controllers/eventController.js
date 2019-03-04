@@ -26,6 +26,13 @@ exports.search_event_autocomplete = function(req, res) {
     .distinct('event')
     .exec(function(err, events) {
       if (err) res.send(err);
-      res.json(events);
+      res.json(events.sort());
     });
+};
+
+exports.delete_all = function(req, res) {
+  Event.deleteMany({}, function(err) {
+    if (err) return res.send(err);
+    res.status(201).send();
+  });
 };

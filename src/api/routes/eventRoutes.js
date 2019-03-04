@@ -8,4 +8,6 @@ module.exports = function(app) {
     .post(event.create_an_event);
 
   app.route('/events/search').get(event.search_event_autocomplete);
+
+  app.route('/events/all').delete(event.delete_all);
 };
