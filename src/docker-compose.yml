@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  app:
+    restart: always
+    build: .
+    environment:
+      - MONGO_CONN_STR=mongodb://mongo/desafio-dito
+    ports:
+      - 3008:3000
+    command: npm start
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - 27018:27017
