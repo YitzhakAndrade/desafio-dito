@@ -1,5 +1,11 @@
 # Desafio Dito
 
+## Dependências
+
+- Node.js (v8 +)
+- MongoDB local, em rede ou na nuvem 
+  - Setar string de conexão na variável de ambiente `MONGO_CONN_STR` (utilizar preferencialmente o arquivo `.env`, use o .env.example como exemplo)
+
 ## Como executar?
 
 ```
